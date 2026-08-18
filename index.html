@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HyperMall</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <style>
+    /* ─────────────────────────────────────────────
+   TOKENS — 3 colors only, everything else is alpha
+   ───────────────────────────────────────────── */
+    :root {
+      --ink: #0A0711;
+      /* 1. base */
+      --violet: #7C4DFF;
+      /* 2. accent */
+      --haze: #E9E3FF;
+      /* 3. light */
+
+      --haze-90: rgba(233, 227, 255, .90);
+      --haze-64: rgba(233, 227, 255, .64);
+      --haze-44: rgba(233, 227, 255, .44);
+      --haze-22: rgba(233, 227, 255, .22);
+      --haze-12: rgba(233, 227, 255, .12);
+      --haze-07: rgba(233, 227, 255, .07);
+      --haze-04: rgba(233, 227, 255, .04);
+
+      --v-60: rgba(124, 77, 255, .60);
+      --v-32: rgba(124, 77, 255, .32);
+      --v-18: rgba(124, 77, 255, .18);
+      --v-10: rgba(124, 77, 255, .10);
+
+      /* Latin falls to Montserrat, Hangul falls through to Pretendard */
+      --display: "Montserrat", "Pretendard Variable", system-ui, sans-serif;
+      --body: "Montserrat", "Pretendard Variable", system-ui, sans-serif;
+      --mono: "Montserrat", "Pretendard Variable", system-ui, sans-serif;
+
+      --r-lg: 26px;
+      --r-md: 18px;
+      --r-sm: 11px;
+
+      --pad: clamp(20px, 5vw, 64px);
+      --maxw: 1180px;
+      --ease: cubic-bezier(.22, .61, .28, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--ink);
+      color: var(--haze-90);
+      font-family: var(--body);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -.01em;
+      overflow-x: hidden;
+    }
+
+    :lang(en) body,
+    body.en {
+      letter-spacing: 0;
+    }
+
+    /* weight scale — Montserrat and Pretendard both ship 300–900 */
+    .nav-links a {
+      font-weight: 500;
+    }
+
+    .lede,
+    .head p,
+    .card .desc,
+    .step p,
+    .a p,
+    .foot p {
+      font-weight: 400;
+    }
+
+    .feats li,
+    .lic-term {
+      font-weight: 500;
+    }
+
+    .q span {
+      font-weight: 600;
+    }
+
+    h3 {
+      font-weight: 700;
+    }
+
+    h1,
+    h2,
+    .brand {
+      font-weight: 800;
+    }
+
+    img,
+    svg {
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+      background: none;
+      border: 0;
+      cursor: pointer;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--violet);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    /* ── ambient field ───────────────────────────── */
+    .field {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(110px);
+      opacity: .55;
+    }
+
+    .orb.a {
+      width: 44vw;
+      height: 44vw;
+      min-width: 380px;
+      min-height: 380px;
+      background: var(--violet);
+      top: -14vw;
+      left: -6vw;
+    }
+
+    .orb.b {
+      width: 36vw;
+      height: 36vw;
+      min-width: 300px;
+      min-height: 300px;
+      background: var(--violet);
+      opacity: .30;
+      top: 52vh;
+      right: -10vw;
+    }
+
+    .orb.c {
+      width: 30vw;
+      height: 30vw;
+      min-width: 260px;
+      min-height: 260px;
+      background: var(--haze);
+      opacity: .05;
+      top: 130vh;
+      left: 24vw;
+    }
+
+    .grain {
+      position: absolute;
+      inset: -50%;
+      opacity: .16;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .veil {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(120% 90% at 50% 0%, transparent 20%, var(--ink) 78%);
+    }
+
+    /* ── shell ───────────────────────────────────── */
+    .shell {
+      position: relative;
+      z-index: 1;
+    }
+
+    .wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding-inline: var(--pad);
+    }
+
+    /* ── nav ─────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      padding-block: 14px;
+    }
+
+    .nav-in {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 12px 10px 18px;
+      border: 1px solid var(--haze-12);
+      border-radius: var(--r-md);
+      background: rgba(10, 7, 17, .55);
+      backdrop-filter: blur(28px) saturate(150%);
+      -webkit-backdrop-filter: blur(28px) saturate(150%);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 17px;
+      letter-spacing: -.02em;
+      color: var(--haze);
+    }
+
+    .brand svg {
+      width: 22px;
+      height: 22px;
+      color: var(--violet);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      margin-left: auto;
+    }
+
+    .nav-links a {
+      padding: 8px 13px;
+      border-radius: var(--r-sm);
+      font-size: 14px;
+      color: var(--haze-64);
+      transition: color .25s var(--ease), background .25s var(--ease);
+    }
+
+    .nav-links a:hover {
+      color: var(--haze);
+      background: var(--haze-07);
+    }
+
+    .lang {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 3px;
+      border: 1px solid var(--haze-12);
+      border-radius: 999px;
+      background: var(--haze-04);
+    }
+
+    .lang button {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 6px 11px;
+      border-radius: 999px;
+      color: var(--haze-44);
+      transition: color .25s var(--ease), background .25s var(--ease);
+    }
+
+    .lang button[aria-pressed="true"] {
+      color: var(--ink);
+      background: var(--haze);
+    }
+
+    .lang button:not([aria-pressed="true"]):hover {
+      color: var(--haze-90);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 17px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      background: var(--violet);
+      color: #fff;
+      box-shadow: 0 6px 26px var(--v-32);
+      transition: transform .25s var(--ease), box-shadow .25s var(--ease), filter .25s var(--ease);
+    }
+
+    .pill svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .pill:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 34px var(--v-60);
+      filter: brightness(1.08);
+    }
+
+    .nav .pill {
+      padding: 9px 15px;
+    }
+
+    .menu-btn {
+      display: none;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border: 1px solid var(--haze-12);
+      border-radius: var(--r-sm);
+      color: var(--haze-64);
+    }
+
+    .menu-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ── hero ────────────────────────────────────── */
+    .hero {
+      padding: clamp(48px, 9vw, 104px) 0 clamp(56px, 8vw, 96px);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: clamp(28px, 5vw, 64px);
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--haze-44);
+      margin-bottom: 22px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 24px;
+      height: 1px;
+      background: var(--v-60);
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(38px, 6.4vw, 68px);
+      font-weight: 800;
+      line-height: 1.03;
+      letter-spacing: -.035em;
+      color: var(--haze);
+      margin: 0 0 22px;
+      text-wrap: balance;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--violet);
+    }
+
+    .lede {
+      font-size: clamp(15px, 1.6vw, 17.5px);
+      color: var(--haze-64);
+      max-width: 44ch;
+      margin: 0 0 32px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      align-items: center;
+    }
+
+    .ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid var(--haze-22);
+      color: var(--haze-90);
+      background: var(--haze-04);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: border-color .25s var(--ease), background .25s var(--ease), transform .25s var(--ease);
+    }
+
+    .ghost svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .ghost:hover {
+      border-color: var(--haze-44);
+      background: var(--haze-07);
+      transform: translateY(-1px);
+    }
+
+    .fineprint {
+      margin-top: 22px;
+      font-size: 12.5px;
+      color: var(--haze-44);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .fineprint svg {
+      width: 14px;
+      height: 14px;
+      color: var(--haze-44);
+      flex: none;
+    }
+
+    /* ── signature: license card ─────────────────── */
+    .stage {
+      perspective: 1200px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .lic {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid var(--haze-22);
+      border-radius: var(--r-lg);
+      padding: 26px 26px 22px;
+      background: linear-gradient(150deg, var(--haze-12), var(--haze-04) 42%, transparent);
+      backdrop-filter: blur(34px) saturate(160%);
+      -webkit-backdrop-filter: blur(34px) saturate(160%);
+      box-shadow: 0 30px 80px rgba(10, 7, 17, .6), inset 0 1px 0 var(--haze-22);
+      transform-style: preserve-3d;
+      transition: transform .5s var(--ease);
+      overflow: hidden;
+    }
+
+    .sheen {
+      position: absolute;
+      inset: -40%;
+      pointer-events: none;
+      background: linear-gradient(105deg, transparent 38%, var(--haze-22) 47%, var(--v-32) 52%, transparent 62%);
+      transform: translateX(var(--sx, -30%));
+      transition: transform .6s var(--ease);
+      mix-blend-mode: screen;
+    }
+
+    .lic-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 44px;
+    }
+
+    .chip {
+      width: 38px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--haze-22);
+      background: var(--v-18);
+      display: grid;
+      place-items: center;
+      color: var(--violet);
+    }
+
+    .chip svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .lic-brand {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: -.02em;
+      color: var(--haze-64);
+    }
+
+    .k {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--haze-44);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .lic-name {
+      font-family: var(--display);
+      font-size: 25px;
+      font-weight: 700;
+      letter-spacing: -.03em;
+      color: var(--haze);
+      line-height: 1.15;
+    }
+
+    .lic-tag {
+      font-size: 13px;
+      color: var(--haze-44);
+      margin-top: 3px;
+    }
+
+    .lic-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top: 1px solid var(--haze-12);
+    }
+
+    .lic-price {
+      font-family: var(--mono);
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--haze);
+      letter-spacing: -.02em;
+    }
+
+    .lic-term {
+      font-size: 14px;
+      color: var(--haze-64);
+    }
+
+    .fade {
+      transition: opacity .35s var(--ease), transform .35s var(--ease);
+    }
+
+    .fade.out {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    .bar {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      background: var(--violet);
+      width: 0;
+    }
+
+    /* ── sections ────────────────────────────────── */
+    section {
+      padding-block: clamp(56px, 8vw, 104px);
+    }
+
+    .head {
+      max-width: 52ch;
+      margin-bottom: clamp(28px, 4vw, 48px);
+    }
+
+    h2 {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: clamp(26px, 3.7vw, 41px);
+      line-height: 1.12;
+      letter-spacing: -.03em;
+      color: var(--haze);
+      margin: 0 0 14px;
+      text-wrap: balance;
+    }
+
+    .head p {
+      color: var(--haze-64);
+      margin: 0;
+      font-size: 15.5px;
+    }
+
+    /* ── product grid ────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--haze-12);
+      border-radius: var(--r-lg);
+      padding: 24px 22px 22px;
+      background: linear-gradient(165deg, var(--haze-07), var(--haze-04));
+      backdrop-filter: blur(30px) saturate(140%);
+      -webkit-backdrop-filter: blur(30px) saturate(140%);
+      transition: border-color .35s var(--ease), transform .35s var(--ease), background .35s var(--ease);
+    }
+
+    .card:hover {
+      border-color: var(--haze-22);
+      transform: translateY(-3px);
+    }
+
+    .card.soon {
+      opacity: .78;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      flex: none;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      border: 1px solid var(--haze-12);
+      background: var(--v-18);
+      color: var(--violet);
+    }
+
+    .icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 5px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--v-32);
+      color: var(--violet);
+      background: var(--v-10);
+      white-space: nowrap;
+    }
+
+    .badge.mute {
+      border-color: var(--haze-22);
+      color: var(--haze-44);
+      background: transparent;
+    }
+
+    .card h3 {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.03em;
+      color: var(--haze);
+      margin: 0 0 4px;
+    }
+
+    .card .role {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--haze-44);
+      margin: 0 0 10px;
+    }
+
+    .card .desc {
+      font-size: 14px;
+      color: var(--haze-64);
+      margin: 0 0 18px;
+    }
+
+    .feats {
+      list-style: none;
+      margin: 0 0 20px;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .feats li {
+      display: flex;
+      gap: 9px;
+      font-size: 13.5px;
+      color: var(--haze-64);
+    }
+
+    .feats svg {
+      width: 15px;
+      height: 15px;
+      flex: none;
+      margin-top: 3px;
+      color: var(--violet);
+    }
+
+    .terms {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .term {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--haze-12);
+      color: var(--haze-64);
+      background: var(--haze-04);
+      transition: all .25s var(--ease);
+    }
+
+    .term:hover {
+      border-color: var(--haze-22);
+      color: var(--haze-90);
+    }
+
+    .term[aria-pressed="true"] {
+      background: var(--violet);
+      border-color: var(--violet);
+      color: #fff;
+      box-shadow: 0 4px 16px var(--v-32);
+    }
+
+    .price-row {
+      margin-top: auto;
+      padding-top: 18px;
+      border-top: 1px solid var(--haze-12);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .price {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.03em;
+      color: var(--haze);
+      white-space: nowrap;
+      min-width: 0;
+    }
+
+    .main-p {
+      display: flex;
+      align-items: baseline;
+      gap: 3px;
+      white-space: nowrap;
+    }
+
+    .price small {
+      font-family: var(--body);
+      font-size: 11.5px;
+      font-weight: 400;
+      color: var(--haze-44);
+      letter-spacing: 0;
+      white-space: nowrap;
+      margin-left: 2px;
+    }
+
+    .price.tbd {
+      font-size: 16px;
+      color: var(--haze-44);
+      font-weight: 500;
+    }
+
+    .buy {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      flex: none;
+      padding: 9px 15px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 600;
+      border: 1px solid var(--v-32);
+      color: var(--haze);
+      background: var(--v-18);
+      transition: background .25s var(--ease), border-color .25s var(--ease), transform .25s var(--ease);
+    }
+
+    .buy svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .buy:hover {
+      background: var(--violet);
+      border-color: var(--violet);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .buy[aria-disabled="true"] {
+      pointer-events: none;
+      border-color: var(--haze-12);
+      background: transparent;
+      color: var(--haze-44);
+    }
+
+    /* ── steps ───────────────────────────────────── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .step {
+      border: 1px solid var(--haze-12);
+      border-radius: var(--r-lg);
+      padding: 24px 22px;
+      background: var(--haze-04);
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
+      position: relative;
+    }
+
+    .step .n {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      color: var(--violet);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .step .icon {
+      margin-bottom: 16px;
+    }
+
+    .step h3 {
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: var(--haze);
+      margin: 0 0 7px;
+    }
+
+    .step p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--haze-64);
+    }
+
+    /* ── faq ─────────────────────────────────────── */
+    .faq {
+      border-top: 1px solid var(--haze-12);
+    }
+
+    .q {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      text-align: left;
+      padding: 22px 4px;
+      border-bottom: 1px solid var(--haze-12);
+      transition: color .25s var(--ease);
+    }
+
+    .q span {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--haze-90);
+    }
+
+    .q:hover span {
+      color: var(--haze);
+    }
+
+    .q .mark {
+      width: 26px;
+      height: 26px;
+      flex: none;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid var(--haze-22);
+      color: var(--haze-64);
+      transition: transform .35s var(--ease), background .25s var(--ease), color .25s var(--ease);
+    }
+
+    .q .mark svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .q[aria-expanded="true"] .mark {
+      transform: rotate(45deg);
+      background: var(--violet);
+      border-color: var(--violet);
+      color: #fff;
+    }
+
+    .a {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .4s var(--ease);
+      border-bottom: 1px solid var(--haze-12);
+    }
+
+    .a.open {
+      grid-template-rows: 1fr;
+    }
+
+    .a>div {
+      overflow: hidden;
+    }
+
+    .a p {
+      margin: 0;
+      padding: 0 60px 24px 4px;
+      font-size: 14.5px;
+      color: var(--haze-64);
+      max-width: 66ch;
+    }
+
+    /* ── closing ─────────────────────────────────── */
+    .close-band {
+      border: 1px solid var(--haze-12);
+      border-radius: var(--r-lg);
+      padding: clamp(30px, 5vw, 56px);
+      background: linear-gradient(150deg, var(--v-18), var(--haze-04));
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .close-band h2 {
+      margin-bottom: 8px;
+    }
+
+    .close-band p {
+      margin: 0;
+      color: var(--haze-64);
+      font-size: 15px;
+      max-width: 42ch;
+    }
+
+    footer {
+      border-top: 1px solid var(--haze-12);
+      padding: 34px 0 46px;
+      margin-top: clamp(56px, 8vw, 96px);
+    }
+
+    .foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .foot .brand {
+      font-size: 15px;
+    }
+
+    .foot p {
+      margin: 0;
+      font-size: 12.5px;
+      color: var(--haze-44);
+    }
+
+    .foot nav {
+      display: flex;
+      gap: 18px;
+      font-size: 13px;
+      color: var(--haze-44);
+    }
+
+    .foot nav a:hover {
+      color: var(--haze-90);
+    }
+
+    /* ── reveal ──────────────────────────────────── */
+    .rise {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .7s var(--ease), transform .7s var(--ease);
+    }
+
+    .rise.in {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── responsive ──────────────────────────────── */
+    @media (max-width:1000px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stage {
+        order: -1;
+        justify-content: flex-start;
+      }
+
+      .lic {
+        max-width: 360px;
+      }
+    }
+
+    @media (max-width:760px) {
+      .nav-links {
+        display: none;
+      }
+
+      .menu-btn {
+        display: grid;
+      }
+
+      .nav .pill span {
+        display: none;
+      }
+
+      .nav .pill {
+        padding: 9px;
+      }
+
+      .grid,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-in {
+        margin-inline: 0;
+      }
+
+      .price-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+      }
+
+      .buy {
+        justify-content: center;
+      }
+
+      .a p {
+        padding-right: 20px;
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      * {
+        animation: none !important;
+        transition-duration: .01ms !important;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      .rise {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="field" aria-hidden="true">
+    <div class="orb a"></div>
+    <div class="orb b"></div>
+    <div class="orb c"></div>
+    <div class="veil"></div>
+    <div class="grain"></div>
+  </div>
+
+  <div class="shell">
+
+    <!-- NAV -->
+    <header class="nav">
+      <div class="nav-in wrap">
+        <a class="brand" href="#top">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 2 3 7v10l9 5 9-5V7z" />
+            <path d="M8 9.5v5M16 9.5v5M8 12h8" />
+          </svg>
+          HyperMall
+        </a>
+        <nav class="nav-links">
+          <a href="#products" data-i18n="nav.products">제품</a>
+          <a href="#how" data-i18n="nav.how">이용 안내</a>
+          <a href="#faq" data-i18n="nav.faq">자주 묻는 질문</a>
+        </nav>
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="ko" aria-pressed="true">KR</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <a class="pill" href="https://discord.gg/DzWGYZEne" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M19.3 5.4A17 17 0 0 0 15.1 4l-.2.4a13 13 0 0 1 3.7 1.8 15.7 15.7 0 0 0-13.2 0A13 13 0 0 1 9.1 4.4L8.9 4a17 17 0 0 0-4.2 1.4C2 9.4 1.3 13.3 1.6 17.1a17 17 0 0 0 5.2 2.6l1-1.7a11 11 0 0 1-1.8-.9l.4-.3a12 12 0 0 0 11.2 0l.4.3a11 11 0 0 1-1.8.9l1 1.7a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.5 14.8c-1 0-1.9-.9-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm7 0c-1 0-1.9-.9-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z" />
+          </svg>
+          <span data-i18n="nav.discord">디스코드</span>
+        </a>
+      </div>
+    </header>
+
+    <main id="top">
+
+      <!-- HERO -->
+      <div class="wrap hero">
+        <div class="hero-grid">
+          <div>
+            <span class="eyebrow" data-i18n="hero.eyebrow">디지털 라이선스 스토어</span>
+            <h1 data-i18n="hero.title">필요한 기간만큼 <em>고르는</em> 라이선스</h1>
+            <p class="lede" data-i18n="hero.lede">하루부터 영구까지, 사용 기간을 직접 고릅니다. 결제하면 디스코드에서 바로 안내해 드려요.</p>
+            <div class="actions">
+              <a class="pill" href="#products">
+                <span data-i18n="hero.cta1">제품 보기</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </a>
+              <a class="ghost" href="https://discord.gg/DzWGYZEne" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+                <span data-i18n="hero.cta2">디스코드 참여</span>
+              </a>
+            </div>
+            <p class="fineprint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 11v5M12 8h.01" />
+              </svg>
+              <span data-i18n="hero.note">가격은 부가세가 포함된 금액이에요.</span>
+            </p>
+          </div>
+
+          <!-- signature license card -->
+          <div class="stage">
+            <div class="lic" id="lic">
+              <div class="sheen" aria-hidden="true"></div>
+              <div class="lic-top">
+                <div class="chip" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <rect x="3" y="6" width="18" height="12" rx="2" />
+                    <path d="M7 10h4M7 14h2" />
+                  </svg>
+                </div>
+                <span class="lic-brand">HyperMall</span>
+              </div>
+              <div class="fade" id="licBody">
+                <span class="k" data-i18n="card.license">라이선스</span>
+                <div class="lic-name" id="licName">제닉스 인터널</div>
+                <div class="lic-tag" id="licTag">Sysinfo Pulse 기반</div>
+              </div>
+              <div class="lic-row">
+                <div class="fade" id="licTermBox">
+                  <span class="k" data-i18n="card.term">기간</span>
+                  <span class="lic-term" id="licTerm">영구</span>
+                </div>
+                <div class="fade" id="licPriceBox" style="text-align:right">
+                  <span class="k" data-i18n="card.price">가격</span>
+                  <span class="lic-price" id="licPrice" style="display:block">75,000원</span>
+                  <span class="lic-ltc" id="licLtc"
+                    style="display:block;font-size:11.5px;font-weight:500;color:var(--haze-44);font-family:var(--mono);margin-top:2px">≈
+                    1.203 LTC</span>
+                </div>
+              </div>
+              <div class="bar" id="licBar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <section id="products">
+        <div class="wrap">
+          <div class="head rise">
+            <span class="eyebrow" data-i18n="products.eyebrow">제품</span>
+            <h2 data-i18n="products.title">다섯 가지 도구</h2>
+            <p data-i18n="products.lede">필요한 것만 고르세요. 기간은 언제든 다시 선택할 수 있어요.</p>
+          </div>
+          <div class="grid" id="grid"></div>
+        </div>
+      </section>
+
+      <!-- HOW -->
+      <section id="how">
+        <div class="wrap">
+          <div class="head rise">
+            <span class="eyebrow" data-i18n="how.eyebrow">이용 안내</span>
+            <h2 data-i18n="how.title">세 단계면 끝나요</h2>
+            <p data-i18n="how.lede">처음이어도 어렵지 않아요. 막히면 디스코드에서 물어보세요.</p>
+          </div>
+          <div class="steps">
+            <div class="step rise">
+              <span class="n">01</span>
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 6h16M4 12h10M4 18h6" />
+                  <circle cx="18" cy="16" r="3" />
+                </svg></div>
+              <h3 data-i18n="step1.t">제품과 기간 고르기</h3>
+              <p data-i18n="step1.d">쓸 도구와 사용 기간을 정합니다. 짧게 써보고 늘려도 괜찮아요.</p>
+            </div>
+            <div class="step rise">
+              <span class="n">02</span>
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="5" width="20" height="14" rx="2" />
+                  <path d="M2 10h20M6 15h4" />
+                </svg></div>
+              <h3 data-i18n="step2.t">디스코드에서 결제하기</h3>
+              <p data-i18n="step2.d">문의 채널에 글을 남기면 담당자가 결제를 도와드려요.</p>
+            </div>
+            <div class="step rise">
+              <span class="n">03</span>
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="8" cy="14" r="4" />
+                  <path d="M11 11l7-7 3 3-2 2-2-2-2 2" />
+                </svg></div>
+              <h3 data-i18n="step3.t">라이선스 키 받기</h3>
+              <p data-i18n="step3.d">키를 받아 프로그램에 입력하면 바로 사용할 수 있어요.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq">
+        <div class="wrap">
+          <div class="head rise">
+            <span class="eyebrow" data-i18n="faq.eyebrow">자주 묻는 질문</span>
+            <h2 data-i18n="faq.title">궁금할 만한 것들</h2>
+          </div>
+          <div class="faq" id="faqList"></div>
+        </div>
+      </section>
+
+      <!-- CLOSE -->
+      <section>
+        <div class="wrap">
+          <div class="close-band rise">
+            <div>
+              <h2 data-i18n="close.title">더 궁금한 점이 있나요?</h2>
+              <p data-i18n="close.lede">디스코드에서 편하게 물어보세요. 보통 하루 안에 답장해 드려요.</p>
+            </div>
+            <a class="pill" href="https://discord.gg/DzWGYZEne" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M19.3 5.4A17 17 0 0 0 15.1 4l-.2.4a13 13 0 0 1 3.7 1.8 15.7 15.7 0 0 0-13.2 0A13 13 0 0 1 9.1 4.4L8.9 4a17 17 0 0 0-4.2 1.4C2 9.4 1.3 13.3 1.6 17.1a17 17 0 0 0 5.2 2.6l1-1.7a11 11 0 0 1-1.8-.9l.4-.3a12 12 0 0 0 11.2 0l.4.3a11 11 0 0 1-1.8.9l1 1.7a17 17 0 0 0 5.2-2.6c.4-4.4-.7-8.3-3.1-11.7ZM8.5 14.8c-1 0-1.9-.9-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Zm7 0c-1 0-1.9-.9-1.9-2.1s.8-2.1 1.9-2.1 1.9 1 1.9 2.1-.8 2.1-1.9 2.1Z" />
+              </svg>
+              <span data-i18n="close.cta">디스코드 열기</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div class="wrap foot">
+        <div>
+          <a class="brand" href="#top">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M12 2 3 7v10l9 5 9-5V7z" />
+              <path d="M8 9.5v5M16 9.5v5M8 12h8" />
+            </svg>
+            HyperMall
+          </a>
+          <p style="margin-top:8px" data-i18n="foot.copy">© 2026 HyperMall. 모든 가격은 원화 기준입니다.</p>
+        </div>
+        <nav>
+          <a href="#products" data-i18n="nav.products">제품</a>
+          <a href="#how" data-i18n="nav.how">이용 안내</a>
+          <a href="#faq" data-i18n="nav.faq">자주 묻는 질문</a>
+          <a href="https://discord.gg/DzWGYZEne" target="_blank" rel="noopener" data-i18n="nav.discord">디스코드</a>
+        </nav>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+      const DISCORD = "https://discord.gg/DzWGYZEne";
+
+      /* ── icons ───────────────────────────────── */
+      const S = (p) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+      const ICON = {
+        video: S('<rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 11l6-3v8l-6-3z"/>'),
+        color: S('<path d="M12 3c-4.5 0-8 3.4-8 7.7 0 4 3 6.3 6 6.3 1.2 0 1.7.7 1.7 1.5 0 1 .8 1.5 1.6 1.5 3.6 0 6.7-3.4 6.7-8C20 6.4 16.5 3 12 3z"/><circle cx="8" cy="10" r="1"/><circle cx="12" cy="8" r="1"/><circle cx="16" cy="11" r="1"/>'),
+        pen: S('<path d="M12 3l4 8-4 10-4-10z"/><path d="M12 11v4"/>'),
+        audio: S('<path d="M4 10v4M8 6v12M12 9v6M16 4v16M20 10v4"/>'),
+        spark: S('<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M18 16.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/>'),
+        check: S('<path d="M20 6L9 17l-5-5"/>'),
+        cart: S('<circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12h11L21 7H6"/>'),
+        plus: S('<path d="M12 5v14M5 12h14"/>')
+      };
+
+      /* ── data ────────────────────────────────── */
+      const P = [
+        {
+          id: "xenith", icon: "video", badge: { ko: "Sysinfo Pulse 기반", en: "Sysinfo Pulse Based" },
+          name: { ko: "제닉스 인터널", en: "Xenith Internal" },
+          role: { ko: "Sysinfo Pulse 기반", en: "Sysinfo Pulse Based" },
+          desc: { ko: "Sysinfo Pulse 엔진을 기반으로 설계된 고성능 인터널 모듈입니다.", en: "High-performance internal module built on the Sysinfo Pulse engine." },
+          feats: {
+            ko: ["Sysinfo Pulse 독자 기반", "메모리 연산 및 프로세스 최적화", "높은 안정성과 빠른 반응속도"],
+            en: ["Sysinfo Pulse engine based", "Memory ops & process optimization", "High stability and fast response"]
+          },
+          plans: [["d7", 3.0], ["d30", 4.5], ["life", 10.0]], def: 1
+        },
+
+        {
+          id: "prism", icon: "color", badge: { ko: "자체제작", en: "In-House" },
+          name: { ko: "프리즘 인터널 + 프리즘 1pc", en: "Prism Internal + Prism 1PC" },
+          role: { ko: "자체제작 솔루션", en: "In-House Solution" },
+          desc: { ko: "자체 개발된 프리즘 인터널 모듈과 1PC 전용 라이선스를 함께 제공하는 패키지입니다.", en: "In-house developed Prism Internal module packaged with dedicated 1PC license." },
+          feats: {
+            ko: ["자체 제작 독자 모듈", "1PC 전용 라이선스 세트", "안정적인 인터널 연산"],
+            en: ["In-house standalone module", "1PC dedicated license set", "Stable internal operations"]
+          },
+          plans: [["d7", 3.0], ["d30", 4.5], ["life", 8.0]], def: 1
+        },
+
+        {
+          id: "pixie", icon: "pen", badge: { ko: "자체제작", en: "In-House" },
+          name: { ko: "픽시 익스터널", en: "Pixie External" },
+          role: { ko: "자체제작 솔루션", en: "In-House Solution" },
+          desc: { ko: "자체 제작된 익스터널 구조로 안전하게 메모리와 프로세스를 구동합니다.", en: "In-house developed external structure for safe memory and process operation." },
+          feats: {
+            ko: ["자체 제작 외부 모듈", "저부하 익스터널 연산", "높은 시스템 호환성"],
+            en: ["In-house external module", "Low-overhead external ops", "High system compatibility"]
+          },
+          plans: [["d7", 2.5], ["d30", 4.0], ["life", 7.0]], def: 1
+        },
+
+        {
+          id: "emu1", icon: "spark", badge: { ko: "자체제작", en: "In-House" },
+          name: { ko: "1pc 에뮬레이터", en: "1PC Emulator" },
+          role: { ko: "자체제작 솔루션", en: "In-House Solution" },
+          desc: { ko: "단일 PC 환경에 맞춰 자체 제작된 1PC 전용 에뮬레이터 구동 환경입니다.", en: "In-house developed 1PC dedicated emulator environment optimized for single PC." },
+          feats: {
+            ko: ["자체 제작 에뮬레이션 엔진", "1PC 환경 최적화", "독자 샌드박스 및 입출력 제어"],
+            en: ["In-house emulation engine", "1PC environment opt", "Standalone sandbox & I/O control"]
+          },
+          plans: [["d7", 2.5], ["d30", 4.5], ["life", 10.0]], def: 1
+        },
+
+        {
+          id: "emu2", icon: "spark", badge: { ko: "자체제작", en: "In-House" },
+          name: { ko: "1pc 에뮬레이터2", en: "1PC Emulator 2" },
+          role: { ko: "자체제작 솔루션", en: "In-House Solution" },
+          desc: { ko: "향상된 파이프라인과 추가 기능을 지원하는 차세대 2세대 자체 제작 에뮬레이터입니다.", en: "Next-gen 2nd generation in-house emulator with enhanced pipeline and extra features." },
+          feats: {
+            ko: ["자체 제작 2세대 에뮬레이션", "다중 파이프라인 제어", "고급 시스템 호환성 지원"],
+            en: ["In-house 2nd-gen emulation", "Multi-pipeline control", "Advanced system compatibility"]
+          },
+          plans: [["d7", 3.5], ["d30", 6.0], ["life", 9.0]], def: 1
+        }
+      ];
+
+      /* ── copy ────────────────────────────────── */
+      const T = {
+        ko: {
+          "nav.products": "제품", "nav.how": "이용 안내", "nav.faq": "자주 묻는 질문", "nav.discord": "디스코드",
+          "hero.eyebrow": "디지털 라이선스 스토어",
+          "hero.title": "필요한 기간만큼 <em>고르는</em> 라이선스",
+          "hero.lede": "하루부터 영구까지, 사용 기간을 직접 고릅니다. 결제하면 디스코드에서 바로 안내해 드려요.",
+          "hero.cta1": "제품 보기", "hero.cta2": "디스코드 참여",
+          "hero.note": "가격은 부가세가 포함된 금액이에요.",
+          "card.license": "라이선스", "card.term": "기간", "card.price": "가격",
+          "products.eyebrow": "제품", "products.title": "다섯 가지 도구",
+          "products.lede": "필요한 것만 고르세요. 기간은 언제든 다시 선택할 수 있어요.",
+          "how.eyebrow": "이용 안내", "how.title": "세 단계면 끝나요",
+          "how.lede": "처음이어도 어렵지 않아요. 막히면 디스코드에서 물어보세요.",
+          "step1.t": "제품과 기간 고르기", "step1.d": "쓸 도구와 사용 기간을 정합니다. 짧게 써보고 늘려도 괜찮아요.",
+          "step2.t": "디스코드에서 결제하기", "step2.d": "문의 채널에 글을 남기면 담당자가 결제를 도와드려요.",
+          "step3.t": "라이선스 키 받기", "step3.d": "키를 받아 프로그램에 입력하면 바로 사용할 수 있어요.",
+          "faq.eyebrow": "자주 묻는 질문", "faq.title": "궁금할 만한 것들",
+          "close.title": "더 궁금한 점이 있나요?", "close.lede": "디스코드에서 편하게 물어보세요. 보통 하루 안에 답장해 드려요.",
+          "close.cta": "디스코드 열기",
+          "foot.copy": "© 2026 HyperMall. 모든 가격은 원화 기준입니다.",
+          "buy": "디스코드에서 구매", "soon": "가격 준비 중",
+          "terms": { d1: "1일", d3: "3일", d7: "7일", d30: "30일", life: "영구" },
+          "per": { d1: "1일", d3: "3일", d7: "7일", d30: "30일", life: "영구 사용" },
+          "tbd": "가격 준비 중",
+          "faqs": [
+            ["기간이 끝나면 어떻게 되나요?", "자동으로 다시 결제되지 않아요. 계속 쓰고 싶다면 원하는 기간을 다시 고르면 됩니다."],
+            ["컴퓨터를 바꿔도 되나요?", "1PC 라이선스는 컴퓨터 한 대에서 사용해요. 기기를 옮기려면 디스코드로 알려주시면 옮겨 드립니다."],
+            ["환불이 되나요?", "라이선스 키를 받기 전이라면 전액 돌려드려요. 받은 뒤에는 사용 여부를 확인하고 안내해 드립니다."],
+            ["결제는 어떻게 하나요?", "계좌이체와 암호화폐를 받습니다. 자세한 방법은 디스코드 문의 채널에서 알려드려요."],
+            ["설치가 잘 안 되면요?", "디스코드에 상황을 남겨 주세요. 화면을 함께 보며 처음부터 도와드립니다."]
+          ]
+        },
+        en: {
+          "nav.products": "Products", "nav.how": "How it works", "nav.faq": "FAQ", "nav.discord": "Discord",
+          "hero.eyebrow": "Digital license store",
+          "hero.title": "Licenses that last <em>as long as</em> you need",
+          "hero.lede": "Choose a day, a month, or forever. Once you pay, we'll walk you through setup on Discord.",
+          "hero.cta1": "See products", "hero.cta2": "Join Discord",
+          "hero.note": "All prices include VAT.",
+          "card.license": "License", "card.term": "Term", "card.price": "Price",
+          "products.eyebrow": "Products", "products.title": "Five tools",
+          "products.lede": "Pick only what you need. You can choose a different term any time.",
+          "how.eyebrow": "How it works", "how.title": "Three steps, that's it",
+          "how.lede": "It's simple even the first time. Ask on Discord if you get stuck.",
+          "step1.t": "Pick a product and term", "step1.d": "Choose your tool and how long you'll use it. Start short and extend later.",
+          "step2.t": "Pay on Discord", "step2.d": "Post in the support channel and someone will help you check out.",
+          "step3.t": "Get your license key", "step3.d": "Enter the key in the app and you're ready to work.",
+          "faq.eyebrow": "FAQ", "faq.title": "Good to know",
+          "close.title": "Still have a question?", "close.lede": "Ask us on Discord. We usually reply within a day.",
+          "close.cta": "Open Discord",
+          "foot.copy": "© 2026 HyperMall. Prices shown in Korean won.",
+          "buy": "Buy on Discord", "soon": "Pricing coming soon",
+          "terms": { d1: "1 day", d3: "3 days", d7: "7 days", d30: "30 days", life: "Lifetime" },
+          "per": { d1: "1 day", d3: "3 days", d7: "7 days", d30: "30 days", life: "Lifetime" },
+          "tbd": "Pricing coming soon",
+          "faqs": [
+            ["What happens when my term ends?", "Nothing renews automatically. To keep going, just choose a term again."],
+            ["Can I switch computers?", "A 1PC license runs on one computer. Tell us on Discord and we'll move it for you."],
+            ["Can I get a refund?", "Full refund before your key is issued. After that, we'll check usage and let you know your options."],
+            ["How do I pay?", "Bank transfer and Crypto. We'll share the details in the Discord support channel."],
+            ["What if the install doesn't work?", "Post what you're seeing on Discord. We'll walk through it with you from the start."]
+          ]
+        }
+      };
+
+      let lang = (navigator.language || "ko").toLowerCase().startsWith("ko") ? "ko" : "en";
+      const state = {};
+      P.forEach(p => state[p.id] = p.def);
+
+      let rates = {
+        usdKrw: 1415,
+        ltcKrw: 62300
+      };
+
+      async function fetchRates() {
+        try {
+          const [resUSD, resLTC] = await Promise.all([
+            fetch("https://open.er-api.com/v6/latest/USD").then(r => r.json()).catch(() => null),
+            fetch("https://api.coinbase.com/v2/exchange-rates?currency=LTC").then(r => r.json()).catch(() => null)
+          ]);
+          if (resUSD && resUSD.rates && resUSD.rates.KRW) {
+            rates.usdKrw = resUSD.rates.KRW;
+          }
+          if (resLTC && resLTC.data && resLTC.data.rates && resLTC.data.rates.KRW) {
+            rates.ltcKrw = parseFloat(resLTC.data.rates.KRW);
+          }
+          buildCards();
+          renderLic(licIdx);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      const money = (v) => {
+        const krw = Math.round(v * 10000);
+        if (lang === "ko") {
+          return krw.toLocaleString("ko-KR") + "원";
+        } else {
+          const usd = krw / rates.usdKrw;
+          return "$" + usd.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+      };
+
+      const ltcMoney = (v) => {
+        const krw = v * 10000;
+        const ltc = krw / rates.ltcKrw;
+        return "≈ " + ltc.toFixed(3) + " LTC";
+      };
+
+      /* ── render products ─────────────────────── */
+      const grid = document.getElementById("grid");
+
+      function buildCards() {
+        grid.innerHTML = "";
+        P.forEach((p, i) => {
+          const card = document.createElement("article");
+          card.className = "card rise" + (p.soon ? " soon" : "");
+          card.style.transitionDelay = Math.min(i * 60, 240) + "ms";
+
+          const badge = p.badge
+            ? `<span class="badge ${p.soon ? "mute" : ""}">${p.badge[lang]}</span>` : "";
+
+          const terms = p.plans.map(([k], idx) =>
+            `<button type="button" class="term" data-p="${p.id}" data-i="${idx}"
+           aria-pressed="${state[p.id] === idx}">${T[lang].terms[k]}</button>`).join("");
+
+          const val = p.plans.length ? p.plans[state[p.id]][1] : 0;
+          const priceHTML = p.soon
+            ? `<div class="price tbd">${T[lang].tbd}</div>`
+            : `<div class="price" data-price="${p.id}">
+             <div class="main-p">${money(val)}<small>${T[lang].per[p.plans[state[p.id]][0]]}</small></div>
+             <div class="ltc-p" style="font-size:11.5px;font-weight:500;color:var(--haze-44);margin-top:2px;">${ltcMoney(val)}</div>
+           </div>`;
+
+          const cta = p.soon
+            ? `<span class="buy" aria-disabled="true">${T[lang].soon}</span>`
+            : `<a class="buy" href="${DISCORD}" target="_blank" rel="noopener">${ICON.cart}<span>${T[lang].buy}</span></a>`;
+
+          card.innerHTML = `
+        <div class="card-top"><div class="icon">${ICON[p.icon]}</div>${badge}</div>
+        <h3>${p.name[lang]}</h3>
+        <p class="role">${p.role[lang]}</p>
+        <p class="desc">${p.desc[lang]}</p>
+        <ul class="feats">${p.feats[lang].map(f => `<li>${ICON.check}<span>${f}</span></li>`).join("")}</ul>
+        ${terms ? `<div class="terms" role="group" aria-label="${p.name[lang]}">${terms}</div>` : ""}
+        <div class="price-row">${priceHTML}${cta}</div>`;
+          grid.appendChild(card);
+        });
+        observe();
+      }
+
+      grid.addEventListener("click", (e) => {
+        const b = e.target.closest(".term");
+        if (!b) return;
+        const id = b.dataset.p, idx = +b.dataset.i;
+        if (state[id] === idx) return;
+        state[id] = idx;
+        b.parentElement.querySelectorAll(".term").forEach(t =>
+          t.setAttribute("aria-pressed", String(t === b)));
+        const prod = P.find(x => x.id === id);
+        const el = grid.querySelector(`[data-price="${id}"]`);
+        el.classList.add("fade", "out");
+        setTimeout(() => {
+          const val = prod.plans[idx][1];
+          el.innerHTML = `<div class="main-p">${money(val)}<small>${T[lang].per[prod.plans[idx][0]]}</small></div>` +
+            `<div class="ltc-p" style="font-size:11.5px;font-weight:500;color:var(--haze-44);margin-top:2px;">${ltcMoney(val)}</div>`;
+          el.classList.remove("out");
+        }, 180);
+      });
+
+      /* ── faq ─────────────────────────────────── */
+      const faqList = document.getElementById("faqList");
+      function buildFaq() {
+        faqList.innerHTML = "";
+        T[lang].faqs.forEach((f, i) => {
+          const q = document.createElement("button");
+          q.type = "button"; q.className = "q"; q.setAttribute("aria-expanded", "false");
+          q.innerHTML = `<span>${f[0]}</span><span class="mark">${ICON.plus}</span>`;
+          const a = document.createElement("div");
+          a.className = "a"; a.innerHTML = `<div><p>${f[1]}</p></div>`;
+          q.addEventListener("click", () => {
+            const open = q.getAttribute("aria-expanded") === "true";
+            q.setAttribute("aria-expanded", String(!open));
+            a.classList.toggle("open", !open);
+          });
+          faqList.append(q, a);
+        });
+      }
+
+      /* ── static strings ──────────────────────── */
+      function applyStrings() {
+        document.documentElement.lang = lang;
+        document.body.classList.toggle("en", lang === "en");
+        document.querySelectorAll("[data-i18n]").forEach(el => {
+          const v = T[lang][el.dataset.i18n];
+          if (v !== undefined) el.innerHTML = v;
+        });
+        document.querySelectorAll(".lang button").forEach(b =>
+          b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+      }
+
+      document.querySelector(".lang").addEventListener("click", (e) => {
+        const b = e.target.closest("button[data-lang]");
+        if (!b || b.dataset.lang === lang) return;
+        lang = b.dataset.lang;
+        applyStrings(); buildCards(); buildFaq(); renderLic(licIdx);
+      });
+
+      /* ── hero license card ───────────────────── */
+      const lic = document.getElementById("lic"),
+        licName = document.getElementById("licName"),
+        licTag = document.getElementById("licTag"),
+        licTerm = document.getElementById("licTerm"),
+        licPrice = document.getElementById("licPrice"),
+        licLtc = document.getElementById("licLtc"),
+        licBar = document.getElementById("licBar"),
+        boxes = [document.getElementById("licBody"),
+        document.getElementById("licTermBox"),
+        document.getElementById("licPriceBox")];
+      const cyc = P.filter(p => p.plans.length);
+      let licIdx = 0, timer = null, paused = false;
+
+      function renderLic(i) {
+        const p = cyc[i], plan = p.plans[p.plans.length - 1];
+        licName.textContent = p.name[lang];
+        licTag.textContent = p.role[lang];
+        licTerm.textContent = T[lang].terms[plan[0]];
+        licPrice.textContent = money(plan[1]);
+        if (licLtc) licLtc.textContent = ltcMoney(plan[1]);
+      }
+      function swap() {
+        boxes.forEach(b => b.classList.add("out"));
+        setTimeout(() => {
+          licIdx = (licIdx + 1) % cyc.length;
+          renderLic(licIdx);
+          boxes.forEach(b => b.classList.remove("out"));
+        }, 320);
+      }
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduced) {
+        let t0 = performance.now();
+        const DUR = 4200;
+        (function loop(now) {
+          if (!paused) {
+            const e = now - t0;
+            licBar.style.width = Math.min(e / DUR, 1) * 100 + "%";
+            if (e >= DUR) { swap(); t0 = now; }
+          } else { t0 = now - 0; }
+          requestAnimationFrame(loop);
+        })(performance.now());
+        lic.addEventListener("pointerenter", () => paused = true);
+        lic.addEventListener("pointerleave", () => { paused = false; lic.style.transform = ""; lic.style.setProperty("--sx", "-30%"); });
+        lic.addEventListener("pointermove", (ev) => {
+          const r = lic.getBoundingClientRect();
+          const x = (ev.clientX - r.left) / r.width - .5;
+          const y = (ev.clientY - r.top) / r.height - .5;
+          lic.style.transform = `rotateY(${x * 9}deg) rotateX(${-y * 9}deg) translateZ(6px)`;
+          lic.style.setProperty("--sx", (x * 70 - 15) + "%");
+        });
+      }
+
+      /* ── reveal ──────────────────────────────── */
+      let io;
+      function observe() {
+        if (!("IntersectionObserver" in window)) {
+          document.querySelectorAll(".rise").forEach(el => el.classList.add("in")); return;
+        }
+        io = io || new IntersectionObserver((entries) => {
+          entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+        }, { rootMargin: "0px 0px -8% 0px", threshold: .12 });
+        document.querySelectorAll(".rise:not(.in)").forEach(el => io.observe(el));
+      }
+
+      /* ── boot ────────────────────────────────── */
+      applyStrings(); buildCards(); buildFaq(); renderLic(0); observe(); fetchRates();
+    })();
+  </script>
+</body>
+
+</html>
